@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6.28) (preloaded format=pdflatex 2021.7.8)  13 JAN 2022 14:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (MiKTeX 21.6.28) (preloaded format=pdflatex 2021.7.8)  24 FEB 2022 15:00
 entering extended mode
 **./GMM_document.tex
 (GMM_document.tex
@@ -312,8 +312,7 @@ File: l3backend-pdftex.def 2021-05-07 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count281
 \l__pdf_internal_box=\box52
 )
-(C:\Users\ryanb.LAPTOP-4EHB9TVB\Google Drive\Github\GMM_write_up\build\GMM_docu
-ment.aux)
+(G:\My Drive\Github\GMM_write_up\build\GMM_document.aux)
 \openout1 = `GMM_document.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 15.
@@ -389,10 +388,8 @@ LaTeX Info: Redefining \ref on input line 15.
 LaTeX Info: Redefining \pageref on input line 15.
 LaTeX Info: Redefining \nameref on input line 15.
 
-(C:\Users\ryanb.LAPTOP-4EHB9TVB\Google Drive\Github\GMM_write_up\build\GMM_docu
-ment.out)
-(C:\Users\ryanb.LAPTOP-4EHB9TVB\Google Drive\Github\GMM_write_up\build\GMM_docu
-ment.out)
+(G:\My Drive\Github\GMM_write_up\build\GMM_document.out)
+(G:\My Drive\Github\GMM_write_up\build\GMM_document.out)
 \@outlinefile=\write3
 \openout3 = `GMM_document.out'.
 
@@ -412,28 +409,44 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/MiKTeX/pdftex/config/pdftex.map}]
-
-(C:\Users\ryanb.LAPTOP-4EHB9TVB\Google Drive\Github\GMM_write_up\build\GMM_docu
-ment.aux)
+ [2] [3] (G:\My Drive\Github\GMM_write_up\build\GMM_document.aux)
 Package rerunfilecheck Info: File `GMM_document.out' has not changed.
-(rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
+(rerunfilecheck)             Checksum: 991406B4A86E94AC18455F6FFB4978C7;432.
  ) 
 Here is how much of TeX's memory you used:
- 8748 strings out of 478847
- 131397 string characters out of 2840803
- 435834 words of memory out of 3000000
- 26586 multiletter control sequences out of 15000+600000
- 411143 words of font info for 55 fonts, out of 8000000 for 9000
+ 8802 strings out of 478847
+ 131579 string characters out of 2840803
+ 453941 words of memory out of 3000000
+ 26614 multiletter control sequences out of 15000+600000
+ 416550 words of font info for 75 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,6n,66p,311b,324s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,8n,66p,1271b,325s stack positions out of 5000i,500n,10000p,200000b,80000s
 <C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/pub
-lic/amsfonts/cm/cmr10.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Program
-s/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/ryanb.LAPTOP-4EHB9T
-VB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb>
-Output written on "C:\Users\ryanb.LAPTOP-4EHB9TVB\Google Drive\Github\GMM_write
-_up\build\GMM_document.pdf" (1 page, 41577 bytes).
+lic/amsfonts/cm/cmbx10.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Progra
+ms/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Users/ryanb.LAPTOP-4EHB
+9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:
+/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmex10.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/Mi
+KTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/
+AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><C:/User
+s/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfon
+ts/cm/cmmi7.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/f
+onts/type1/public/amsfonts/cm/cmmib10.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/rya
+nb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm
+/cmr12.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmr17.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Loca
+l/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/ryanb.LAPTO
+P-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmsy7.pfb><C:/Users/ryanb.LAPTOP-4EHB9TVB/AppData/Local/Progr
+ams/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Users/ryanb.LAPTOP-4EH
+B9TVB/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.
+pfb>
+Output written on "G:\My Drive\Github\GMM_write_up\build\GMM_document.pdf" (3 p
+ages, 192265 bytes).
 PDF statistics:
- 26 PDF objects out of 1000 (max. 8388607)
- 2 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 131 PDF objects out of 1000 (max. 8388607)
+ 18 named destinations out of 1000 (max. 500000)
+ 25 words of extra memory for PDF output out of 10000 (max. 10000000)
 
