@@ -59,7 +59,7 @@ p(\mathbf{x}) = \sum_{\mathbf{z}}p(\mathbf{x}, \mathbf{z})d\mathbf{z} = \sum_{k=
 \end{equation}
 
 I find the fact that the marginal distribution $p(\mathbf{x})$ can be tractably determined to be a useful result of the discrete latent variable assumption, as often in non-linear generative models the integral over the latent space cannot be tractably computed as the latent space is continuous. The is beneficial in two ways: \emph{i)} we can directly estimate the data likelihood for any sample $\mathbf{x}_i$ using $p(\mathbf{x})$, and \emph{ii)} we can estimate the posterior latent conditional probability for any sample $\mathbf{x}_i$. Recall that Bayes' theorem states that the relationship between conditional probabilities is
-\begin{equation}
+\begin{equation}\label{eq:posterior_distribution}
 p(\mathbf{z} \vert \mathbf{x}) = \frac{p(\mathbf{z})p(\mathbf{x}\vert \mathbf{z})}{p(\mathbf{x})},
 \end{equation}
 and for $z_k = 1$, this can be written as
@@ -75,7 +75,7 @@ As described in Bishop [CITE], $p(z_k = 1\vert \mathbf{x})$ is referred to as th
 \section{Optimising the model}
 The next stage of this write-up is to detail how the model parameters are optimised. First, we assume that we have a dataset of $N$ observations $\{\mathbf{x}_i, \cdots, \mathbf{x}_N\}$ and we wish to model this data using a GMM. We represent this dataset in a matrix $\mathbf{X}$ where $\mathbf{X} = \left[ \mathbf{x}_i, \cdots, \mathbf{x}_N \right]^T$. Note that $\mathbf{x}_i$ is a column vector $\mathbf{x}_i \in \mathbb{R}^D$ and $\mathbf{X}$ is a matrix where $\mathbf{X} \in \mathbb{R}^{N \times D}$ and the $n^{th}$ row of $\mathbf{X}$ is given by $\mathbf{x}_n^T$.  The natural logarithm of the likelihood function $p(\mathbf{X}\vert \boldsymbol\pi, \boldsymbol\mu, \boldsymbol\Sigma)$ is given as
 \begin{equation}\label{eq:ll_function}
-\log_e p(\mathbf{X}\vert \boldsymbol\pi, \boldsymbol\mu, \boldsymbol\Sigma) = \sum_{n = 1}^{N} \left[  \sum_{k=1}^{K} \pi_k \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right],
+\log_e p(\mathbf{X}\vert \boldsymbol\pi, \boldsymbol\mu, \boldsymbol\Sigma) = \sum_{n = 1}^{N} \log_e \left[  \sum_{k=1}^{K} \pi_k \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right],
 \end{equation}
 where $\boldsymbol\mu = \{ \boldsymbol\mu_1, \cdots, \boldsymbol\mu_K \}$ and $\boldsymbol\Sigma = \{ \boldsymbol\Sigma_1, \cdots, \boldsymbol\Sigma_K \}$. Before we continue, however, there are three core issues with the GMM log-likelihoood function that we wish to optimise. Firstly, if $K \geq 2$, there exists the case that the model may assign $\mu_j$ to any sample $\mathbf{x}_n$, and induce a singularity in the model. What is implied here is that the model may match the $k^{th}$ mean $\boldsymbol\mu_k$ with one of the samples such that the likelihood of $p(\mathbf{x}_n\vert z_k = 1)$ is proportional to $\frac{1}{\vert \boldsymbol\Sigma \vert}$, where $\vert \boldsymbol\Sigma_k \vert = \text{det}(\boldsymbol\Sigma_k)$ is the determinant of $\boldsymbol\Sigma_k$. In this single sample matching process, the model can then reduce the covariance determinant (thereby shrinking the volume (?) of the distribution) around $\mathbf{x}_n$ such that the log-likelihood function tends towards infinity. 
 
@@ -91,10 +91,100 @@ The objective of the EM algorithm is to find maximum likelihood solutions to mod
 \end{equation}
 where we have replaced $\log_e(\cdot)$ with $\ln(\cdot)$. If we recall the steps in our derivation of Equation \eqref{eq:ll_function}, we noted that the marginalisation of $p(\mathbf{x}, \mathbf{z})$ resulted in a sum over the $K$ latent states or classes, and that this summation term reflects in the log-likelihood function and ultimately complicates the procedure. 
 
-Imagine for a second that we had access to both the dataset $\mathbf{X}$ and the corresponding latent variables $\mathbf{Z}$. If we had access to this information, we would not have to maximise the log-likelihood function of $p(\mathbf{x})$, and we could rather use $p(\mathbf{x}, \mathbf{z})$. This idea defines a complete dataset $\{\mathbf{X}, \mathbf{Z}\}$, and in turn, a complete log-likelihood function that we can maximise. This maximisation of the complete log-likelihood function is straight-forward as the logarithm of Equation \eqref{eq:joint_distribution} is a sum of Gaussian logarithms, which is far easier to use. Naturally, we do not have access to $\mathbf{Z}$, otherwise we would not have tried to marginalise the variables out and used $p(\mathbf{x})$ in Equation \eqref{eq:ll_function}. However, what we do have access to is the latent posterior conditional distribution $p(\mathbf{z}\vert\mathbf{x}, \boldsymbol\theta)$, and we can use this posterior distribution to infer information about $\mathbf{Z}$ based on the model parameter set $\boldsymbol\theta$. 
+Imagine for a second that we had access to both the dataset $\mathbf{X}$ and the corresponding latent variables $\mathbf{Z}$. If we had access to this information, we would not have to maximise the log-likelihood function of $p(\mathbf{x})$, and we could rather use the joint distribution $p(\mathbf{x}, \mathbf{z})$. This idea requires a complete dataset $\{\mathbf{X}, \mathbf{Z}\}$, and in turn, provides a complete log-likelihood function that we can maximise. This log-likelihood function is given as
+\begin{equation}\label{eq:complete_ll_function}
+\ln p(\mathbf{X}, \mathbf{Z}) = \sum_{n=1}^{N} \sum_{k=1}^{K} z_{nk}\left[\ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right],
+\end{equation}
+where $z_{nk}$ is a vector in the one-of-K representation discussed earlier. For convienience, we can replace this with the indicator function $\mathbf{1}_k(\mathbf{z}_n)$, where
+\begin{equation}
+\mathbf{1}_k(\mathbf{z}_n) = 
+\begin{cases} 
+1 & \text{if } z_{nk} = 1, \\
+0 & \text{otherwise.}
+\end{cases}
+\end{equation}
+Thus, Equation \eqref{eq:complete_ll_function} can be written as
+\begin{equation}\label{eq:complete_ll_function_updated}
+\ln p(\mathbf{X}, \mathbf{Z}) = \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right],
+\end{equation}
 
-As we do not have access to the complete data log-likelihood, we can consider its expected value under the posterior distribution of the latent variables. The notion here is that we take a generative model, evaluate the posterior distribution $p(\mathbf{Z}\vert\mathbf{X})$ for each of the $n$ samples, and then collate these samples into a $\mathbf{Z}$ matrix. In doing so, we have an estimation of $\mathbf{Z}$, that is a function of the current model parameter state $\boldsymbol\theta_{current}$. 
+ The maximisation of the complete log-likelihood function is Equation \eqref{eq:complete_ll_function} is straight-forward as the logarithm of Equation \eqref{eq:joint_distribution} is a sum of Gaussian logarithms, which is far easier to use. Naturally, we do not have access to $\mathbf{Z}$, otherwise we would not have tried to marginalise the variables out and used $p(\mathbf{x})$ in Equation \eqref{eq:ll_function}. However, what we do have access to is the latent posterior conditional distribution $p(\mathbf{z}\vert\mathbf{x}, \boldsymbol\theta)$, and we can use this posterior distribution to infer information about $\mathbf{Z}$. In this benefit, we can leverage on the mathematical benefits of the complete data log-likelihood, while still updating the model parameters to optimise the model to fit to the available data.
 
-as 
+As we do not have access to the complete data log-likelihood, we can consider its expected value under the posterior distribution of the latent variables. The notion here is that we take a generative model, evaluate the posterior distribution $p(\mathbf{Z}\vert\mathbf{X})$ for each of the $n$ samples, and then collate these samples into a $\mathbf{Z}$ matrix. In doing so, we have an estimation of $\mathbf{Z}$, that is a function of the current model parameter state $\boldsymbol\theta_{current}$. As this inferred state depends on $\boldsymbol\theta$, and we have at no stage made any assumptions as to whether this state is optimal, we also need to perform a maximisation of Equation \eqref{eq:complete_ll_function} with respect to $\boldsymbol\theta$. This idea is referred to as expectation maximisation, whereby we first determine the expectation of the complete data log-likelihood (the E-step) and then maximise this expectation (the M-step) with respect to the model parameters $\boldsymbol\theta$.
+
+More formally, we use the current model parameters $\boldsymbol\theta_{old}$ to compute $p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta_{old})$, and use this posterior distribution to compute the expectation of the complete data log-likelihood for $\boldsymbol\theta$.
+
+
+This process is simple enough to describe, but I believe that the devil is within the details of the process. As such, let us try to compute the expectation of the complete data log-likelihood. The expected value of the Equation \eqref{eq:complete_ll_function_updated} can be written generally as 
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_{\mathbf{Z} \sim p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta_{old})} \left\lbrace \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta) \right\rbrace &= \int_{\mathbf{Z}} \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta) p(\mathbf{Z} \vert\mathbf{X}, \boldsymbol\theta_{old}) d\mathbf{Z} \\
+\mathcal{Q}(\boldsymbol\theta, \boldsymbol\theta_{old}) &= \sum_{\mathbf{Z}} p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta_{old}) \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta),
+\end{aligned}
+\end{equation}
+
+where the posterior distribution is clearly isolated, and showcases how we perform an iterative update scheme when using the EM algorithm. First, we find the posterior distribution $p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta_{old})$ using the current model parameters $\boldsymbol\theta_{old}$. Then, we maximise the expectation of the complete data log-likelihood $\mathcal{Q}(\boldsymbol\theta, \boldsymbol\theta_{old})$ to update $\boldsymbol\theta$. However, this derivation simply shows how the posterior and joint distribution interact within the complete data log-likelihood. If we substitute and expand on the terms within the complete data likelihood, we obtain
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_{\mathbf{Z} \sim p(\mathbf{Z}\vert\mathbf{X}, boldsymbol\theta)} \left\lbrace \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta) \right\rbrace &= \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \right\rbrace \\
+&= \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \right\rbrace \\
+&= \sum_{n=1}^{N} \sum_{k=1}^{K}  \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \right\rbrace,
+\end{aligned}
+\end{equation}
+
+which requires us to evaluate the expectation of the indicator variable with respect to the posterior distribution of the latent variables. If we expand this term (by making use of Equation \eqref{eq:posterior_distribution}), we obtain
+\begin{equation}
+\begin{aligned}
+\mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \right\rbrace &= \int_{\mathbf{z}} \mathbf{z}_n p(\mathbf{z}_n\vert\mathbf{x}_n)d\mathbf{z} \\
+&= \int_{\mathbf{z}} \mathbf{z}_n \frac{p(\mathbf{z}_n)p(\mathbf{x}_n\vert \mathbf{z}_n)}{p(\mathbf{x}_n)} d\mathbf{z} \\
+&= \sum_{k=1}^K z_{nk} \frac{p(\mathbf{x}_n, \mathbf{z}_n)}{p(\mathbf{x}_n)} \\
+&=  \sum_{k=1}^K z_{nk} \frac{\prod_{k=1}^{K} \pi_k^{z_{nk}} \mathcal{N}(\mathbf{x}_n\vert \boldsymbol\mu_k, \boldsymbol\Sigma_k)^{z_{nk}}}{\sum_{j=1}^{K} \pi_j \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_j, \boldsymbol\Sigma_j)^{z_{nj}}} \\
+& \text{as } \mathbf{z}_n \text{ has a 1-of-K representation with } z_{k} = 1, \text {the result becomes}  \\
+&= \frac{\pi_k\mathcal{N}(\mathbf{x}_n\vert \boldsymbol\mu_k, \boldsymbol\Sigma_k)}{\sum_{j=1}\pi_j\mathcal{N}(\mathbf{x}_n\vert \boldsymbol\mu_j, \boldsymbol\Sigma_j)} \\
+&= \gamma(z_{nk}). \\
+\end{aligned}
+\end{equation}
+In this derivation I reversed some terms in the numerator of Bayes' theorem, to make it clear that Equation \eqref{eq:joint_distribution} was used, and introduced the $\gamma(\cdot)$ variable to refer to the latent component responsibilites. There are numerous ways in which the term can be expanded, but I found this way to be the simplest to follow. Thus, the expectation of the complete data log-likelihood can be written as
+\begin{equation}\label{eq:final_complete_data_log_likelihood}
+\begin{aligned}
+\mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \ln p(\mathbf{X}, \mathbf{Z}) \right\rbrace &=  \sum_{n=1}^{N} \sum_{k=1}^{K}  \gamma(z_{nk}) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \\
+\mathcal{L}(\boldsymbol\theta, \boldsymbol\theta_{old}) &= \sum_{n=1}^{N} \sum_{k=1}^{K} p(z_k = 1\vert \mathbf{x}_n, \boldsymbol\theta_{old}) \left[ \ln p(\mathbf{x}_n, z_k = 1 \vert \boldsymbol\theta) \right].
+\end{aligned}
+\end{equation}
+
+Thus, we now have a tractable methodology to optimise a GMM for a given dataset. To make the steps clear, in case someone reading this might be struggling to place the full picture together, I have broken down this EM algorithm into two steps, namely:
+
+\textbf{\emph{i)} E step}: Evaluate the expectation of the complete data log-likelihood as given in Equation \eqref{eq:final_complete_data_log_likelihood}. This requires us to compute the responsibilities $\gamma(z_{nk})$ using the current parameter set $\boldsymbol\theta_{old}$.
+
+\bigskip
+
+\textbf{\emph{ii)} M step}: Update the parameters by maximising Equation \eqref{eq:final_complete_data_log_likelihood}. This can be written formally as
+\begin{equation}
+\boldsymbol\theta_{new} = \max_{\boldsymbol\theta} \mathcal{L}(\boldsymbol\theta, \boldsymbol\theta_{old}).
+\end{equation}
+
+We can then repeat these steps until we reach convergence. Convergence is measured by calculating the data log-likelihood given in Equation \eqref{eq:ll_function} after each parameter update and measuring the change from one iteration to the next. 
+
+\section{Updating the model parameters}
+
+In this section, I will discuss how we optimise $\mathcal{L}(\boldsymbol\theta, \boldsymbol\theta_{old})$ to obtain new parameters analytically. Naturally, there are a number of methods that we can try optimise the parameters, such as numerical optimisation techniques, however it would be great if we could have analytical expressions for each of the terms in $\boldsymbol\theta \left\lbrace\boldsymbol\pi, \boldsymbol\mu, \boldsymbol\Sigma \right\rbrace$. As such, let's see what we can do with $\mathcal{L}(\boldsymbol\theta, \boldsymbol\theta_{old})$.
+
+
+\section{An alternative view on the data likelihood}
+
+In Equation \eqref{eq:ll_function}, the log-likelihood function of the GMM model is given. It was shown and discussed that this objective function is complicated to optimise, and induces a number of problems to the extent where we needed to use the EM algorithm to help us. 
+
+However, there is an alternative derivation that one can use, that I found appear in a number of sources when I went through the derivation [CITE]. This derivation comes about by an alternative expansion of the joint distribution $p(\mathbf{x}, \mathbf{z})$ when calculating $p(\mathbf{x})$. This expansion is as follows:
+\begin{equation}
+\begin{aligned}
+p(\mathbf{x}) &= \int_{\mathbf{z}} p(\mathbf{x}, \mathbf{z}) d\mathbf{z} \\
+&= \int_{\mathbf{z}}p(\mathbf{z}\vert\mathbf{x})p(\mathbf{x})d\mathbf{z} \\
+\end{aligned}
+\end{equation}
+
+If we stop here, it is clear that we have just used an alternative 
+\url{https://towardsdatascience.com/gaussian-\\mixture-models-and-expectation-maximization-a-full-explanation-50fa94111ddd} 
+
+\url{https://wjchen.net/post/en/gmm-em-en.html}
 
 \end{document}
