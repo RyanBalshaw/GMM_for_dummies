@@ -126,13 +126,13 @@ This process is simple enough to describe, but I believe that the devil is withi
 where the posterior distribution is clearly isolated, and showcases how we perform an iterative update scheme when using the EM algorithm. First, we find the posterior distribution $p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta_{old})$ using the current model parameters $\boldsymbol\theta_{old}$. Then, we maximise the expectation of the complete data log-likelihood $\mathcal{Q}(\boldsymbol\theta, \boldsymbol\theta_{old})$ to update $\boldsymbol\theta$. However, this derivation simply shows how the posterior and joint distribution interact within the complete data log-likelihood. If we substitute and expand on the terms within the complete data likelihood, we obtain
 \begin{equation}
 \begin{aligned}
-\mathbb{E}_{\mathbf{Z} \sim p(\mathbf{Z}\vert\mathbf{X}, boldsymbol\theta)} \left\lbrace \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta) \right\rbrace &= \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \right\rbrace \\
+\mathbb{E}_{\mathbf{Z} \sim p(\mathbf{Z}\vert\mathbf{X}, \boldsymbol\theta)} \left\lbrace \ln p(\mathbf{X}, \mathbf{Z} \vert \boldsymbol\theta) \right\rbrace &= \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \right\rbrace \\
 &= \sum_{n=1}^{N} \sum_{k=1}^{K} \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \right\rbrace \\
 &= \sum_{n=1}^{N} \sum_{k=1}^{K}  \left[ \ln \pi_k + \ln \mathcal{N}(\mathbf{x}_n \vert \boldsymbol\mu_k, \boldsymbol\Sigma_k) \right] \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \right\rbrace,
 \end{aligned}
 \end{equation}
 
-which requires us to evaluate the expectation of the indicator variable with respect to the posterior distribution of the latent variables. If we expand this term (by making use of Equation \eqref{eq:posterior_distribution}), we obtain
+which requires us to evaluate the expectation of the indicator variable with respect to the posterior distribution of the latent variables. If we expand this term by making use of Equation \eqref{eq:posterior_distribution} the expectation of interest becomes
 \begin{equation}
 \begin{aligned}
 \mathbb{E}_{\mathbf{z} \sim p(\mathbf{z}\vert\mathbf{x})} \left\lbrace \mathbf{1}_k(\mathbf{z}_n) \right\rbrace &= \int_{\mathbf{z}} \mathbf{z}_n p(\mathbf{z}_n\vert\mathbf{x}_n)d\mathbf{z} \\
